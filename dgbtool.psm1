@@ -1,23 +1,23 @@
 ﻿<#
 .Synopsis
-   This reads the Word dokument that is used to gather information about new employes 
+   This reads the Word dokument, that is used to gather information about new employes. 
 .DESCRIPTION
    Denne Cmdlet kan trække information ud af word dokumentet "Ny bruger Skema" og Laver et custum Objekt
-   der hedder DGBUserData, som bliver brugt af andre DGBTools Cmdlets. "Get-DGBSkema" har -Path som en Parameter,
+   der hedder DGBSkemaData, som bliver brugt af andre DGBTools Cmdlets. "Import-DGBSkemaData" har -Path som en Parameter,
    det er en påkrævet parameter. 
 .EXAMPLE
-    Get-DGBSkema -Path "F:\Chris Test.docx"
+   Import-DGBSkemaData -Path "F:\Chris Test.docx"
 .EXAMPLE
-   Another example of how to use this cmdlet
+   Get-ChildItem -Path f:\ | Import-DGBSkemaData
 #>
-function Get-DGBSkema{
+function Import-DGBSkemaData{
     [CmdletBinding()]
     
-    Param(
-        # Sti til dokumentet "Ny Medarbejder Skema"
-        [Parameter(ValueFromPipelineByPropertyName=$true, Position=0, Mandatory=$true)]
-        $Path
-    )#Param
+Param(
+    # Path to the document "Ny Medarbejder Skema"
+    [Parameter(ValueFromPipelineByPropertyName=$true, Position=0, Mandatory=$true)]
+    [string]$Path
+)#Param
 
     Begin{
         # Laver et COM objekt for Microsoft Word
@@ -82,9 +82,9 @@ function Get-DGBSkema{
             'Country'="DK"
         }# $Property
 
-        $DGBUserData = New-Object -TypeName PSObject -Property $Property
+        $DGBSkemaData = New-Object -TypeName PSObject -Property $Property
 
-        Write-Output $DGBUserData
+        Write-Output $DGBSkemaData
 
         $objDocument.ActiveDocument.Close
 
@@ -93,8 +93,45 @@ function Get-DGBSkema{
     End{
         $objWord.Quit()
     }#End
-}#Get-DGBSkema
+}#Import-DGBSkemaData
 
+<#
+.Synopsis
+   This funtion cleans up the DGBSkemaData object
+.DESCRIPTION
+   Long description
+.EXAMPLE
+   Example of how to use this cmdlet
+.EXAMPLE
+   Another example of how to use this cmdlet
+#>
+function Optimize-DGBSkemaData{
+    [CmdletBinding()]
+    
+    Param
+    (
+        # Param1 help description
+        [Parameter(Mandatory=$true,
+                   ValueFromPipelineByPropertyName=$true,
+                   Position=0)]
+        $DGBSkemaData  
+    )
+
+    Begin
+    {
+    }
+    Process{
+        if ($DGBSkemaData -eq 'Klik her.')
+        {
+            $DGBSkemaData = $false
+        }
+        Else{}
+        Write-Output $test
+    }
+    End
+    {
+    }
+}#Optimize-DGBSkemaData
 
 <#
 .Synopsis
@@ -105,29 +142,74 @@ function Get-DGBSkema{
    Example of how to use this cmdlet
 .EXAMPLE
    Another example of how to use this cmdlet
+.INPUTS
+   Inputs to this cmdlet (if any)
+.OUTPUTS
+   Output from this cmdlet (if any)
+.NOTES
+   General notes
+.COMPONENT
+   The component this cmdlet belongs to
+.ROLE
+   The role this cmdlet belongs to
+.FUNCTIONALITY
+   The functionality that best describes this cmdlet
 #>
-function Optimize-DGBUserData{
-    [CmdletBinding()]
-    
+function Write-DGBSkemaDataLog
+{
+    [CmdletBinding(DefaultParameterSetName='Parameter Set 1', 
+                  SupportsShouldProcess=$true, 
+                  PositionalBinding=$false,
+                  HelpUri = 'http://www.microsoft.com/',
+                  ConfirmImpact='Medium')]
+    [OutputType([String])]
     Param
     (
         # Param1 help description
-        [Parameter(Mandatory=$true,
-                   ValueFromPipelineByPropertyName=$true,
-                   Position=0)]
-        $DGBUserData  
+        [Parameter(Mandatory=$true, 
+                   ValueFromPipeline=$true,
+                   ValueFromPipelineByPropertyName=$true, 
+                   ValueFromRemainingArguments=$false, 
+                   Position=0,
+                   ParameterSetName='Parameter Set 1')]
+        [ValidateNotNull()]
+        [ValidateNotNullOrEmpty()]
+        [ValidateCount(0,5)]
+        [ValidateSet("sun", "moon", "earth")]
+        [Alias("p1")] 
+        $Param1,
+
+        # Param2 help description
+        [Parameter(ParameterSetName='Parameter Set 1')]
+        [AllowNull()]
+        [AllowEmptyCollection()]
+        [AllowEmptyString()]
+        [ValidateScript({$true})]
+        [ValidateRange(0,5)]
+        [int]
+        $Param2,
+
+        # Param3 help description
+        [Parameter(ParameterSetName='Another Parameter Set')]
+        [ValidatePattern("[a-z]*")]
+        [ValidateLength(0,15)]
+        [String]
+        $Param3
     )
 
     Begin
     {
+        $Dato = Get-Date
+        $LogPath = "c:\Logs\NyeBrugere.txt"
     }
-    Process{
-        if ($DGBUserData -eq 'Klik her.')
+    Process
+    {
+        foreach ($Data in $DGBUserData)
         {
-            $DGBUserData = $false
+            $Dato | out-file 
+            $Data.Fornavn $Data.Efternavn | Out-File $LogPath -Append
+            "Manglende Informationer" | Out-File $LogPath -Append
         }
-        Else{}
-        Write-Output $test
     }
     End
     {
