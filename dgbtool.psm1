@@ -26,15 +26,15 @@ Param(
     }#Begin
 
     Process{
-        #Open current document
+        # Open current document
         $objDocument = $objWord.Documents.Open("$Path")
          
-        # Finder versionen af Dokumentet
+        # Find the version
         $paras = $objDocument.Paragraphs
         $Version = $paras[3].range.text
         Write-Verbose "Dokumentet er $Version"
 
-        #Set variable for tables
+        # Set variable for tables
         $tables = $objDocument.Tables
   
         # Henter data fra Medarbejder delen af Ny ansat dokumentet
@@ -55,7 +55,7 @@ Param(
         $Leder = $tables[2].cell(3,5).range.text
         $StartDato = $tables[2].cell(5,4).range.text
 
-        # Henter data fra Administration/HR delen af Ny ansat dokumentet
+        # Gather data from the Administration/HR part of the "Ny ansat" document
         Write-Verbose "Collecting HR info."
         $Brugernavn = $tables[4].cell(2,2).range.text
         $Personalenummer = $tables[4].cell(2,3).range.text
@@ -155,8 +155,7 @@ function Optimize-DGBSkemaData{
 .FUNCTIONALITY
    The functionality that best describes this cmdlet
 #>
-function Write-DGBSkemaDataLog
-{
+function Write-DGBSkemaDataLog{
     [CmdletBinding(DefaultParameterSetName='Parameter Set 1', 
                   SupportsShouldProcess=$true, 
                   PositionalBinding=$false,
@@ -218,7 +217,3 @@ function Write-DGBSkemaDataLog
 
 
 Send-MailMessage -From IT@dengamleby.dk -To IT@dengamleby.dk -Subject "Forkert version!" -SmtpServer dgbexch01.dengamleby.dk -Body "Medarbejder skemaet var en forkert version, dokumentets navn er TEST"
-
-
-$objDocument.ActiveDocument.Close
-$objWord.Quit()
