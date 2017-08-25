@@ -153,7 +153,9 @@ Param(
 )# Param
 
     Process{
-        
+        Foreach ($Person in $DGBSkemaData) {
+            New-ADUser -SamAccountName "$person.name" -Country "$Person.Country" -City "$person.city" -Company "$Person.Company" -Department "$Person.Department" -Surname "$Person.surname" -GivenName "$Person.GivenName"
+        }# Foreach
     }
 }# New-DGBUser
 
