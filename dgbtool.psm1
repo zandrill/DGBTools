@@ -92,8 +92,8 @@ Param(
 
     End{
         $objWord.Quit()
-    }#End
-}#Import-DGBSkemaData
+    }# End
+}# Import-DGBSkemaData
 
 <#
 .Synopsis
@@ -104,7 +104,7 @@ Param(
    Example of how to use this cmdlet
 .EXAMPLE
    Another example of how to use this cmdlet
-#>
+#> 
 function Optimize-DGBSkemaData{
     [CmdletBinding()]
     
@@ -131,7 +131,31 @@ function Optimize-DGBSkemaData{
     End
     {
     }
-}#Optimize-DGBSkemaData
+}# Optimize-DGBSkemaData
+
+<#
+.Synopsis
+   Short description
+.DESCRIPTION
+   Long description
+.EXAMPLE
+   Example of how to use this cmdlet
+.EXAMPLE
+   Another example of how to use this cmdlet
+#>
+function New-DGBUser{
+    [CmdletBinding()]
+ 
+Param(
+    # Param1 help description
+    [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true, Position=0)]
+    $DGBSkemaData
+)# Param
+
+    Process{
+        
+    }
+}# New-DGBUser
 
 <#
 .Synopsis
